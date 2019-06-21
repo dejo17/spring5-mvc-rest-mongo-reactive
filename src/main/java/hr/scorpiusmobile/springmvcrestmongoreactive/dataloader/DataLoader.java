@@ -33,58 +33,43 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void loadVendors() {
-        Vendor pero = new Vendor();
-        pero.setLastName("Peric");
-        pero.setFirstName("Pero");
+        Vendor pero = Vendor.builder().lastName("Peric").firstName("Pero").build();
 
-        Vendor dino = new Vendor();
-        dino.setLastName("Dinic");
-        dino.setFirstName("Dino");
+        Vendor dino =  Vendor.builder().lastName("Dinic").firstName("Dino").build();
 
-        Vendor alenko = new Vendor();
-        alenko.setLastName("Haramija");
-        alenko.setFirstName("Alenko");
+        Vendor alenko =  Vendor.builder().lastName("Haramija").firstName("Alenko").build();
 
-        Vendor dani = new Vendor();
-        dani.setLastName("Glavic");
-        dani.setFirstName("Dani");
+        Vendor dani = Vendor.builder().lastName("Glavic").firstName("Dani").build();
 
-        Vendor djuro = new Vendor();
-        djuro.setLastName("Djuric");
-        djuro.setFirstName("Djuro");
+        Vendor djuro =Vendor.builder().lastName("Djuric").firstName("Djuro").build();
 
-        vendorRepository.save(pero);
-        vendorRepository.save(dino);
-        vendorRepository.save(alenko);
-        vendorRepository.save(dani);
-        vendorRepository.save(djuro);
+        vendorRepository.save(pero).block();
+        vendorRepository.save(dino).block();
+        vendorRepository.save(alenko).block();
+        vendorRepository.save(dani).block();
+        vendorRepository.save(djuro).block();
 
-        System.out.println("Customers Loaded");
+        System.out.println("Customers loaded. "+vendorRepository.count().block() + " new vendors added." );
     }
 
     private void loadCategories() {
-        Category fruits = new Category();
-        fruits.setDescription("Fruits");
+        Category fruits = Category.builder().description("Fruits").build();
 
-        Category dried = new Category();
-        dried.setDescription("Dried");
+        Category dried = Category.builder().description("Dried").build();
 
-        Category fresh = new Category();
-        fresh.setDescription("Fresh");
+        Category fresh = Category.builder().description("Fresh").build();
 
-        Category exotic = new Category();
-        exotic.setDescription("Exotic");
+        Category exotic = Category.builder().description("Exotic").build();
 
-        Category nuts = new Category();
-        nuts.setDescription("Nuts");
+        Category nuts = Category.builder().description("Nuts").build();
 
-        categoryRepository.save(fruits);
-        categoryRepository.save(dried);
-        categoryRepository.save(fresh);
-        categoryRepository.save(exotic);
-        categoryRepository.save(nuts);
+        categoryRepository.save(fruits).block();
+        categoryRepository.save(dried).block();
+        categoryRepository.save(fresh).block();
+        categoryRepository.save(exotic).block();
+        categoryRepository.save(nuts).block();
 
 
-        System.out.println("Categories Loaded");
+        System.out.println("Categories loaded. "+categoryRepository.count().block() + " new categories added." );
     }
 }
