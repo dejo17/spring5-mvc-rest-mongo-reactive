@@ -2,12 +2,12 @@ package hr.scorpiusmobile.springmvcrestmongoreactive.controllers;
 
 import hr.scorpiusmobile.springmvcrestmongoreactive.domain.Category;
 import hr.scorpiusmobile.springmvcrestmongoreactive.repositories.CategoryRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import org.reactivestreams.Publisher;
 
 
 @RestController
@@ -28,6 +28,12 @@ public class CategoryController {
     @GetMapping("/{description}")
     public Mono<Category> getCategoryByName(@PathVariable String description){
         return categoryRepository.findByDescription(description);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public Mono<Void> createNewUser(@RequestBody Publisher<Category> categoryStream){  //mono and flux are publishers
+        return categoryRepository.saveAll(categoryStream).then();  //then returns Mono<void>
     }
 
 }

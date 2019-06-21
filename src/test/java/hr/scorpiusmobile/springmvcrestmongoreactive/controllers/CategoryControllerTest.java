@@ -10,6 +10,9 @@ import org.mockito.Mockito;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import org.reactivestreams.Publisher;
+
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
 class CategoryControllerTest {
@@ -31,7 +34,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void getAllCategories() {
+    void testGetAllCategories() {
 
         //this time BDD style syntax:
         BDDMockito.given(categoryRepository
@@ -46,7 +49,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void getCategoryByName() {
+    void testGetCategoryByName() {
         //this time BDD style syntax:
         BDDMockito.given(categoryRepository
                 .findById(anyString()))
@@ -55,6 +58,21 @@ class CategoryControllerTest {
         webTestClient.get().uri("/api/v1/categories/Category")
                 .exchange()
                 .expectBody(Category.class);
+    }
 
+    @Test
+    void testCreateNewCategory() {
+
+        BDDMockito.given(categoryRepository
+                .saveAll(any(Publisher.class)))
+                .willReturn(Flux.just(Category.builder().build())); //repository returns flux, controller returns empty mono
+
+        Mono<Category> categoryToSave = Mono.just(Category.builder().description("Some category").build());
+        webTestClient.post()
+                .uri("/api/v1/categories/")
+                .body(categoryToSave, Category.class)
+                .exchange()
+                .expectStatus()
+                .isCreated();
     }
 }
