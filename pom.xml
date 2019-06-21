@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>de.flapdoodle.embed</groupId>
 			<artifactId>de.flapdoodle.embed.mongo</artifactId>
-			<scope>test</scope>  <!--embedded mongodb is starting up only for tests-->
+				<scope>test</scope>  <!-- embedded mongodb is starting up only for tests, docker container is used for development -->
 		</dependency>
 		<dependency>
 			<groupId>io.projectreactor</groupId>
