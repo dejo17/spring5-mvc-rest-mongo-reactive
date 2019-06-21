@@ -34,13 +34,9 @@ public class DataLoader implements CommandLineRunner {
 
     private void loadVendors() {
         Vendor pero = Vendor.builder().lastName("Peric").firstName("Pero").build();
-
         Vendor dino =  Vendor.builder().lastName("Dinic").firstName("Dino").build();
-
         Vendor alenko =  Vendor.builder().lastName("Haramija").firstName("Alenko").build();
-
         Vendor dani = Vendor.builder().lastName("Glavic").firstName("Dani").build();
-
         Vendor djuro =Vendor.builder().lastName("Djuric").firstName("Djuro").build();
 
         vendorRepository.save(pero).block();
@@ -54,13 +50,9 @@ public class DataLoader implements CommandLineRunner {
 
     private void loadCategories() {
         Category fruits = Category.builder().description("Fruits").build();
-
         Category dried = Category.builder().description("Dried").build();
-
         Category fresh = Category.builder().description("Fresh").build();
-
         Category exotic = Category.builder().description("Exotic").build();
-
         Category nuts = Category.builder().description("Nuts").build();
 
         categoryRepository.save(fruits).block();
