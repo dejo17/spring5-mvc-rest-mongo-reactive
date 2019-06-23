@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 import org.reactivestreams.Publisher;
 
 @RestController
-@RequestMapping("/api/v1/vendors/")
+@RequestMapping("/api/v1/vendors")
 public class VendorController {
 
     private final VendorRepository vendorRepository; //skipping the service layer in this example

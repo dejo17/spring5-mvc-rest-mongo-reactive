@@ -12,7 +12,7 @@ import org.reactivestreams.Publisher;
 
 
 @RestController
-@RequestMapping("/api/v1/categories/")
+@RequestMapping("/api/v1/categories")
 public class CategoryController {
 
     private final CategoryRepository categoryRepository; //skipping service layer in this example

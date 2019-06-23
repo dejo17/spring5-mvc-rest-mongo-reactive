@@ -44,7 +44,7 @@ class CategoryControllerTest {
                 .willReturn(Flux.just(Category.builder().description("Category1").build(),
                         Category.builder().description("Category2").build()));
 
-        webTestClient.get().uri("/api/v1/categories/")
+        webTestClient.get().uri("/api/v1/categories")
                 .exchange()
                 .expectBodyList(Category.class)
                 .hasSize(2);
@@ -71,7 +71,7 @@ class CategoryControllerTest {
 
         Mono<Category> categoryToSave = Mono.just(Category.builder().description("Some category").build());
         webTestClient.post()
-                .uri("/api/v1/categories/")
+                .uri("/api/v1/categories")
                 .body(categoryToSave, Category.class)
                 .exchange()
                 .expectStatus()

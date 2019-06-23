@@ -36,7 +36,7 @@ class VendorControllerTest {
 
         BDDMockito.given(vendorRepository.findAll()).willReturn(Flux.just(Vendor.builder().build(),Vendor.builder().build()));
 
-        webTestClient.get().uri("/api/v1/vendors/")
+        webTestClient.get().uri("/api/v1/vendors")
                 .exchange()
                 .expectBodyList(Vendor.class)
                 .hasSize(2);
@@ -63,7 +63,7 @@ class VendorControllerTest {
 
         Mono<Vendor> vendorToSave = Mono.just(Vendor.builder().firstName("Some vendor").build());
         webTestClient.post()
-                .uri("/api/v1/vendors/")
+                .uri("/api/v1/vendors")
                 .body(vendorToSave, Vendor.class)
                 .exchange()
                 .expectStatus()
