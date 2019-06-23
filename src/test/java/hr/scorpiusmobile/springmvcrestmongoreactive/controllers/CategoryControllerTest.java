@@ -12,8 +12,10 @@ import reactor.core.publisher.Mono;
 
 import org.reactivestreams.Publisher;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 class CategoryControllerTest {
 
@@ -91,6 +93,48 @@ class CategoryControllerTest {
                 .exchange()
                 .expectStatus()
                 .isOk();
+    }
+
+    @Test
+    void testPatchCategoryWithChange(){
+
+        BDDMockito.given(categoryRepository.findById(anyString()))
+                .willReturn(Mono.just(Category.builder().description("Description").build()));
+
+        BDDMockito.given(categoryRepository.save(any(Category.class)))
+                .willReturn(Mono.just(Category.builder().description("New description").build())); //repository returns flux, controller returns empty mono
+
+        Mono<Category> categoryToSave = Mono.just(Category.builder().description("New description").build());
+
+        webTestClient.patch()
+                .uri("/api/v1/categories/1")
+                .body(categoryToSave, Category.class)
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        BDDMockito.verify(categoryRepository).save(any());
+    }
+
+    @Test
+    void testPatchCategoryWithoutChange(){
+
+        BDDMockito.given(categoryRepository.findById(anyString()))
+                .willReturn(Mono.just(Category.builder().description("Description").build()));
+
+        BDDMockito.given(categoryRepository.save(any(Category.class)))
+                .willReturn(Mono.just(Category.builder().description("Description").build())); //repository returns flux, controller returns empty mono
+
+        Mono<Category> categoryToSave = Mono.just(Category.builder().description("Description").build());
+
+        webTestClient.patch()
+                .uri("/api/v1/categories/1")
+                .body(categoryToSave, Category.class)
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        BDDMockito.verify(categoryRepository, times(0)).save(any());
     }
 
 }

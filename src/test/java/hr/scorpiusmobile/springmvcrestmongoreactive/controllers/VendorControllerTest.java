@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 class VendorControllerTest {
 
@@ -70,7 +71,7 @@ class VendorControllerTest {
     }
 
     @Test
-    void testUpdatVendor() {
+    void testUpdateVendor() {
 
         BDDMockito.given(vendorRepository
                 .save(any(Vendor.class)))
@@ -84,5 +85,47 @@ class VendorControllerTest {
                 .exchange()
                 .expectStatus()
                 .isOk();
+    }
+
+    @Test
+    void testPatchVendorWithChange() {
+
+        BDDMockito.given(vendorRepository.findById(anyString()))
+                .willReturn(Mono.just(Vendor.builder().lastName("Peric").firstName("Djuro").build()));
+
+        BDDMockito.given(vendorRepository.save(any(Vendor.class)))
+                .willReturn(Mono.just(Vendor.builder().lastName("Peric").firstName("Pate").build())); //repository returns flux, controller returns empty mono
+
+        Mono<Vendor> vendorToSave = Mono.just(Vendor.builder().firstName("Pate").build());
+
+        webTestClient.patch()
+                .uri("/api/v1/vendors/1")
+                .body(vendorToSave, Vendor.class)
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        BDDMockito.verify(vendorRepository).save(any());
+
+    }
+    @Test
+    void testPatchVendorWithoutChange() {
+
+        BDDMockito.given(vendorRepository.findById(anyString()))
+                .willReturn(Mono.just(Vendor.builder().lastName("Peric").firstName("Djuro").build()));
+
+        BDDMockito.given(vendorRepository.save(any(Vendor.class)))
+                .willReturn(Mono.just(Vendor.builder().lastName("Peric").firstName("Djuro").build())); //repository returns flux, controller returns empty mono
+
+        Mono<Vendor> vendorToSave = Mono.just(Vendor.builder().build());
+
+        webTestClient.patch()
+                .uri("/api/v1/vendors/1")
+                .body(vendorToSave, Vendor.class)
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        BDDMockito.verify(vendorRepository, times( 0)).save(any());
     }
 }

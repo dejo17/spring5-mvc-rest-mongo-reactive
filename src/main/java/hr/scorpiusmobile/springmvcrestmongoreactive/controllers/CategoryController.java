@@ -42,5 +42,18 @@ public class CategoryController {
         category.setId(id);
         return categoryRepository.save(category);
     }
+    @PatchMapping("/{id}")
+    Mono<Category> patchCategory(@RequestBody Category categoryToSave, @PathVariable String id){
 
+        //*************************//
+        //this belongs to service layer, which is here omitted for simplicity
+        Category foundCategory = categoryRepository.findById(id).block();
+
+        if(categoryToSave.getDescription()!=null && !foundCategory.getDescription().equalsIgnoreCase(categoryToSave.getDescription())){
+            foundCategory.setDescription(categoryToSave.getDescription());
+            return categoryRepository.save(foundCategory);
+        }
+        //************************//
+        return Mono.just(foundCategory);
+    }
 }
