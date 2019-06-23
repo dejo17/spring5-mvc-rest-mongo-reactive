@@ -54,7 +54,7 @@ class VendorControllerTest {
     }
 
     @Test
-    void testCreateNewCategory() {
+    void testCreateNewVendor() {
 
         BDDMockito.given(vendorRepository
                 .saveAll(any(Publisher.class)))
@@ -70,7 +70,7 @@ class VendorControllerTest {
     }
 
     @Test
-    void testUpdateCategory() {
+    void testUpdatVendor() {
 
         BDDMockito.given(vendorRepository
                 .save(any(Vendor.class)))
